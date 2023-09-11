@@ -23,7 +23,9 @@ export const App = () => {
       fetchWrapper.get("http://localhost:7088/read_waiting_queue_items?src=" + q)
         .then(({data}) => {
           obj[q] = data.waiting_queue_items;
-          setJobs(obj);
+          if (Object.keys(obj).length === queues.length) {
+            setJobs(obj);
+          }
         })
         .catch((err) => { 
           console.log(err); 
