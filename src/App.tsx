@@ -61,9 +61,9 @@ export const App = () => {
             {currentQueue === "" ? (
               <Text>{"Select a queue to view its items"}</Text>
             ) : jobs[currentQueue].map((j, index) => {
-              let jsonText = JSON.stringify(j);
+              let jsonText = JSON.stringify(j, undefined, 4);
               return (
-                <HStack>
+                <HStack key={index}>
                   <VStack >
                     <IconButton
                       aria-label='Move upward'
@@ -82,8 +82,22 @@ export const App = () => {
                       onClick={() => { }}
                     />
                   </VStack>
-                  <Button key={index} w={500} h={61}>
-                    {jsonText.length < 50 ? jsonText : jsonText.substring(0, 50)+" ..."}
+                  <Button 
+                    key={index} 
+                    w={600} 
+                    h={120} 
+                    flexDir="column" 
+                    alignItems="flex-start" 
+                    paddingLeft={5}
+                  >
+                    <Text 
+                      w={580}
+                      noOfLines={5} 
+                      textAlign="left"
+                      whiteSpace="break-spaces"
+                    >
+                      {jsonText.length < 120 ? jsonText : jsonText.substring(0, 120)+" ..."}
+                    </Text>
                   </Button>
                 </HStack>
               );
