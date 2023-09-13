@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Text, HStack, Flex, IconButton, VStack, Divider, Button  } from "@chakra-ui/react";
 import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons';
 import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
 
 export const Waiting = () => {
+  const navigate = useNavigate();
   const [queues, setQueues] = useState<string[]>([]);
   const [currentQueue, setCurrentQueue] = useState("");
   const [jobs, setJobs] = useState<Record<string, any[]>>({});
@@ -89,6 +91,13 @@ export const Waiting = () => {
                     flexDir="column" 
                     alignItems="flex-start" 
                     paddingLeft={5}
+                    onClick={() => {
+                      navigate(`/waiting/${currentQueue}/${index}`, {
+                        state: {
+                          jsonText, 
+                        }
+                      });
+                    }}
                   >
                     <Text 
                       w={580}
