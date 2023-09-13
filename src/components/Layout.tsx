@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
-import { NavBar } from "./NavBar";
 
 interface LayoutProps {
   children: any;
@@ -9,7 +8,6 @@ interface LayoutProps {
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <NavBar />
       <Box
         mt={8}
         mx="auto"

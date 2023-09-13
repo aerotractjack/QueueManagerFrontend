@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Flex, Heading } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 interface NavBarProps {
 
 }
 
 export const NavBar: React.FC<NavBarProps> = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const pages = ["waiting", "inprocess", "failed"];
-  const [currentPage, setCurrentPage] = useState(pages[0]);
+  const [currentPage, setCurrentPage] = useState("");
+  useEffect(() => {
+    setCurrentPage(location.pathname.substring(1));
+  }, [location]);
+
   return (
+    <>
     <Flex
       bg="#7c8a94"
       p={4}
@@ -28,7 +37,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         <Button
           w={120} 
           marginRight={5}
-          onClick={() => { setCurrentPage(pages[0]); }} 
+          onClick={() => { setCurrentPage(pages[0]); navigate("/waiting"); }} 
           bg="#89969F"
           color="white"
           isActive={currentPage===pages[0]} 
@@ -39,7 +48,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         <Button
           w={120}
           marginRight={5}
-          onClick={() => { setCurrentPage(pages[1]); }} 
+          onClick={() => { setCurrentPage(pages[1]); navigate("/inprocess"); }} 
           bg="#89969F"
           color="white"
           isActive={currentPage===pages[1]} 
@@ -49,7 +58,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         </Button>
         <Button
           w={120} 
-          onClick={() => { setCurrentPage(pages[2]); }} 
+          onClick={() => { setCurrentPage(pages[2]); navigate("/failed"); }} 
           bg="#89969F"
           color="white"
           isActive={currentPage===pages[2]} 
@@ -59,5 +68,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         </Button>
       </Flex>
     </Flex>
+    <Outlet/>
+    </>
   );
 };
