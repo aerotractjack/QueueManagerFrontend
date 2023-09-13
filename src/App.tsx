@@ -3,6 +3,8 @@ import { Inprocess } from "./pages/Inprocess";
 import { Waiting } from "./pages/Waiting";
 import { Failed } from "./pages/Failed";
 import { NavBar } from "./components/NavBar";
+import { NoPage } from "./pages/NoPage";
+import { Element } from "./pages/Elements";
 
 export const App = () => {
 
@@ -14,6 +16,8 @@ export const App = () => {
           <Route path="waiting" element={<Waiting/>} />
           <Route path="inprocess" element={<Inprocess/>} />
           <Route path="failed" element={<Failed/>} />
+          <Route path="waiting/:queue/:id" element={<Element/>} />
+          <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
