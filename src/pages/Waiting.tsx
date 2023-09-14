@@ -10,6 +10,7 @@ export const Waiting = () => {
   const [queues, setQueues] = useState<string[]>([]);
   const [currentQueue, setCurrentQueue] = useState("");
   const [jobs, setJobs] = useState<Record<string, any[]>>({});
+  const [jobNames, setJobNames] = useState<Record<string, any[]>>({});
 
   useEffect(() => {
     fetchWrapper.get("http://localhost:7088/list_waiting_queues")
@@ -23,12 +24,15 @@ export const Waiting = () => {
 
   useEffect(() => {
     let obj: Record<string, any[]> = {};
+    let obj_jobNames: Record<string, any[]> = {};
     queues.forEach(async (q: string) => {
       fetchWrapper.get("http://localhost:7088/read_waiting_queue_items?src=" + q)
         .then(({data}) => {
           obj[q] = data.waiting_queue_items;
+          obj_jobNames[q] = data.waiting_queue_item_names;
           if (Object.keys(obj).length === queues.length) {
             setJobs(obj);
+            setJobNames(obj_jobNames); 
           }
         })
         .catch((err) => { 
@@ -36,6 +40,21 @@ export const Waiting = () => {
         });
     })
   }, [queues]);
+
+  const swapJob = (a: string, a_num: number, b: string, b_num: number, a_index: number, b_index: number) => {
+    let jsonData = { a, a_num, b, b_num };
+    fetchWrapper.post("http://localhost:7088/swap_waiting_q_items", jsonData)
+      .then( ({data}) => {
+        console.log(data.success);
+        let copy = JSON.parse(JSON.stringify(jobs));
+        copy[a][a_index] = jobs[b][b_index];
+        copy[b][b_index] = jobs[a][a_index];
+        setJobs(copy);
+      })
+      .catch((err) => { 
+        console.log(err); 
+      });
+  };
 
   return (
     <Layout>
@@ -73,7 +92,10 @@ export const Waiting = () => {
                       size='s'
                       p={1}
                       fontSize="15px"
-                      onClick={() => { }}
+                      isDisabled={index===0}
+                      onClick={() => { 
+                        swapJob(currentQueue, jobNames[currentQueue][index], currentQueue, jobNames[currentQueue][index-1], index , index-1); 
+                      }}
                     />
                     <IconButton
                       aria-label='Move downward'
@@ -81,7 +103,10 @@ export const Waiting = () => {
                       size='s'
                       p={1}
                       fontSize="15px"
-                      onClick={() => { }}
+                      isDisabled={index===jobNames[currentQueue].length-1}
+                      onClick={() => { 
+                        swapJob(currentQueue, jobNames[currentQueue][index], currentQueue, jobNames[currentQueue][index+1], index, index+1); 
+                      }}
                     />
                   </VStack>
                   <Button 
