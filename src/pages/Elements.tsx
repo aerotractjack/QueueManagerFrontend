@@ -1,7 +1,8 @@
 import { Layout } from "../components/Layout";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import { IconButton, Text } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { IconButton, Text, } from "@chakra-ui/react";
+import { ArrowBackIcon, } from "@chakra-ui/icons";
+import PopoverForm from "../components/PopoverForm";
 
 export const Element = () => {
   const navigate = useNavigate();
@@ -15,6 +16,13 @@ export const Element = () => {
         icon={<ArrowBackIcon/>}
         onClick={() => { navigate(-1); }}
       />
+
+      <PopoverForm 
+        queues={state.queues} 
+        currentQueue={state.currentQueue} 
+        currentJob={state.currentJob}
+      />
+
       <Text>{`Queue: ${queue}`}</Text>
       <Text>{`Item order: ${id}`}</Text>
       <Text>{`Item config:`}</Text>

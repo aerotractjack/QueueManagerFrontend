@@ -4,6 +4,7 @@ import { Text, HStack, Flex, IconButton, VStack, Divider, Button  } from "@chakr
 import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons';
 import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
+import PopoverForm from "../components/PopoverForm";
 
 export const Waiting = () => {
   const navigate = useNavigate();
@@ -108,6 +109,11 @@ export const Waiting = () => {
                         swapJob(currentQueue, jobNames[currentQueue][index], currentQueue, jobNames[currentQueue][index+1], index, index+1); 
                       }}
                     />
+                    <PopoverForm 
+                      queues={queues} 
+                      currentQueue={currentQueue} 
+                      currentJob={jobNames[currentQueue][index]}
+                    />
                   </VStack>
                   <Button 
                     key={index} 
@@ -120,6 +126,9 @@ export const Waiting = () => {
                       navigate(`/waiting/${currentQueue}/${index}`, {
                         state: {
                           jsonText, 
+                          queues,
+                          currentQueue,
+                          currentJob: jobNames[currentQueue][index],
                         }
                       });
                     }}
