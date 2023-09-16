@@ -112,9 +112,20 @@ export const Waiting = () => {
                     <PopoverForm 
                       queues={queues} 
                       currentQueue={currentQueue} 
-                      currentJob={jobNames[currentQueue][index]}
+                      currentJobName={jobNames[currentQueue][index]}
+                      iconSize="xs"
+                      iconFontSize={15}
                     />
                   </VStack>
+                  <Button h={120}>
+                    <VStack
+                      flexDir="column" 
+                      alignItems="flex-start" 
+                    >
+                      <Text>{`index ${index}`}</Text>
+                      <Text>{`filename ${jobNames[currentQueue][index]}`}</Text>
+                    </VStack>
+                  </Button>
                   <Button 
                     key={index} 
                     w={600} 
@@ -128,7 +139,10 @@ export const Waiting = () => {
                           jsonText, 
                           queues,
                           currentQueue,
-                          currentJob: jobNames[currentQueue][index],
+                          jobNames,
+                          currentJobName: jobNames[currentQueue][index],
+                          jobs,
+                          index,
                         }
                       });
                     }}
