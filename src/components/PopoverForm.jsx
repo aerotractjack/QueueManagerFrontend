@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FormControl, FormLabel, Stack, ButtonGroup, Button, useDisclosure, Popover, PopoverTrigger, IconButton, PopoverContent, FocusLock, PopoverArrow, PopoverCloseButton, Select } from "@chakra-ui/react";
 import { fetchWrapper } from "../utils/fetchWrapper";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 
 
 const moveJobToFrontOrBack = (frontOrBack, src, src_num, dst) => {
@@ -28,7 +28,7 @@ const moveJobToFrontOrBack = (frontOrBack, src, src_num, dst) => {
 };
 
 // The form inside the Popover
-const Form = ({ onCancel, queues, currentQueue, currentJob }) => {
+const Form = ({ onCancel, queues, currentQueue, currentJobName }) => {
   const navigate = useNavigate();
   const [frontOrBack, setFrontOrBack] = useState("");
   const [selectedQueue, setSelectedQueue] = useState("");
@@ -69,7 +69,7 @@ const Form = ({ onCancel, queues, currentQueue, currentJob }) => {
           colorScheme='teal'
           isDisabled={frontOrBack === "" || selectedQueue === ""}
           onClick={() => {
-            moveJobToFrontOrBack(frontOrBack, currentQueue, currentJob, selectedQueue);
+            moveJobToFrontOrBack(frontOrBack, currentQueue, currentJobName, selectedQueue);
             navigate("/waiting");
             window.location.reload(true);
           }}
@@ -82,7 +82,7 @@ const Form = ({ onCancel, queues, currentQueue, currentJob }) => {
 };
 
 // The Popover
-const PopoverForm = ({ queues, currentQueue, currentJob }) => {
+const PopoverForm = ({ queues, currentQueue, currentJobName, iconSize="md", iconFontSize=20 }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
   return (
@@ -96,7 +96,7 @@ const PopoverForm = ({ queues, currentQueue, currentJob }) => {
         closeOnBlur={true}
       >
         <PopoverTrigger>
-          <IconButton size='xs' isRound={true} icon={<FontAwesomeIcon icon={faEllipsisVertical}/>} />
+          <IconButton size={iconSize} fontSize={iconFontSize} isRound={true} icon={<FontAwesomeIcon icon={faEllipsis}/>} />
         </PopoverTrigger>
         <PopoverContent p={5}>
           <FocusLock returnFocus persistentFocus={false}>
@@ -106,7 +106,7 @@ const PopoverForm = ({ queues, currentQueue, currentJob }) => {
               onCancel={onClose} 
               queues={queues} 
               currentQueue={currentQueue}
-              currentJob={currentJob}
+              currentJobName={currentJobName}
             />
           </FocusLock>
         </PopoverContent>
