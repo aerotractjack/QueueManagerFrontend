@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Flex, Heading } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Button, Flex, Heading, Link as ChakraLink } from "@chakra-ui/react";
+import { useNavigate, Link } from "react-router-dom";
 import { Outlet, useLocation } from "react-router-dom";
 
 interface NavBarProps {
@@ -32,7 +32,9 @@ export const NavBar: React.FC<NavBarProps> = () => {
         flex={1}
       >
         <Heading color="white" marginRight={10}>
-          Ziggy
+          <ChakraLink as={Link} to="/">
+            Ziggy
+          </ChakraLink>
         </Heading>
         <Button
           w={120} 

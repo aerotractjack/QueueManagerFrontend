@@ -1,8 +1,10 @@
 import { Layout } from "../components/Layout";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import { HStack, IconButton, Text, VStack, } from "@chakra-ui/react";
+import { HStack, IconButton, Stack, Text, VStack, } from "@chakra-ui/react";
 import { ArrowBackIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import PopoverForm from "../components/PopoverForm";
+import JsonView from '@uiw/react-json-view';
+import { nordTheme } from '@uiw/react-json-view/nord';
 
 export const Element = () => {
   const navigate = useNavigate();
@@ -39,12 +41,16 @@ export const Element = () => {
 
         <Text as="b">{`Item config:`}</Text>
 
-        <Text 
-          textAlign="left"
-          whiteSpace="break-spaces"
-        >
-          {state.jsonText}
-        </Text>
+        <Stack w="100%">
+          <JsonView 
+            value={JSON.parse(state.jsonText)} 
+            displayObjectSize={false} 
+            enableClipboard={false} 
+            collapsed={10} 
+            shortenTextAfterLength={120} 
+            style={{fontSize: "16px", padding: 10, ...nordTheme}}
+          />
+        </Stack>
 
         <HStack m="auto" spacing={14}>
           <PopoverForm 
