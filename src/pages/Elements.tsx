@@ -45,10 +45,11 @@ export const Element = () => {
           <JsonView 
             value={JSON.parse(state.jsonText)} 
             displayObjectSize={false} 
-            enableClipboard={false} 
+            displayDataTypes={false}
+            enableClipboard={true} 
             collapsed={10} 
             shortenTextAfterLength={120} 
-            style={{fontSize: "16px", padding: 10, ...nordTheme}}
+            style={{fontSize: "16px", padding: 10, borderRadius: "10px", ...nordTheme}}
           />
         </Stack>
 
