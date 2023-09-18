@@ -70,11 +70,19 @@ export const Waiting = () => {
               <Button 
                 key={index} 
                 w={120} 
+                h={20}
                 onClick={() => { setCurrentQueue(q); }} 
                 isActive={currentQueue===q} 
-                _active={{bg:'teal',transform: 'scale(0.98)', borderColor: 'teal',}}
+                _active={{bg:'teal', color: 'white', transform: 'scale(0.98)', borderColor: 'teal',}}
               >
-                {q}
+                <Text
+                  aria-valuetext={q}
+                  w={120}
+                  noOfLines={3} 
+                  whiteSpace="break-spaces"
+                >
+                  {q}
+                </Text>
               </Button>
             ))}
           </VStack>
