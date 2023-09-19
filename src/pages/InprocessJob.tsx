@@ -1,17 +1,44 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { VStack, IconButton, HStack, Stack, Text, Flex, Button } from "@chakra-ui/react";
+import { VStack, IconButton, HStack, Stack, Text, Flex, Box } from "@chakra-ui/react";
 import { ArrowBackIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import JsonView from "@uiw/react-json-view";
 import { nordTheme } from "@uiw/react-json-view/nord";
 import { Layout } from "../components/Layout";
+import { useEffect, useState } from "react";
+import { fetchWrapper } from "../utils/fetchWrapper";
 
+interface TmpdirLog {
+  error: string 
+  exception: string
+  output: string 
+}
 
 export const InprocessJob = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const [tmpdirLog, setTmpdirLog] = useState<TmpdirLog>({} as TmpdirLog);
+
+  let src = "";
+  if (typeof state.jobs[state.index]["tmpdir"] !== "undefined") {
+    src = state.jobs[state.index]["tmpdir"];
+  }
+
+  useEffect(() => {
+    setTmpdirLog({} as TmpdirLog);
+    fetchWrapper.get("http://localhost:7088/read_tmpdir?src="+src)
+      .then(({data}) => {
+        setTmpdirLog(data);
+      })
+      .catch((err) => { 
+        console.log(err); 
+      });
+  }, [src]);
 
   return (
     <Layout>
+      {Object.keys(tmpdirLog).length !== 3 ? (
+        <Text>{"loading..."}</Text>
+      ) : (
       <VStack
         spacing={3}
         flexDir="column" 
@@ -45,53 +72,39 @@ export const InprocessJob = () => {
         <Flex m="auto" gap={4}>
           <VStack>
             <Text as="b">{`Ouput:`}</Text>
-            <Button 
-              // flexDir="column" 
-              // alignItems="flex-start" 
-              // paddingLeft={5}
-            >
+            <Box bg="gray" p={2} w={250} borderRadius="10px">
               <Text 
-                noOfLines={5} 
                 textAlign="left"
                 whiteSpace="break-spaces"
               >
-                {"..."}
+                {tmpdirLog.output.length === 0 ? " " : tmpdirLog.output}
               </Text>
-            </Button>
-          </VStack>
-          <VStack>
-            <Text as="b">{`Error:`}</Text>
-            <Button 
-              // flexDir="column" 
-              // alignItems="flex-start" 
-              // paddingLeft={5}
-            >
-              <Text 
-                noOfLines={5} 
-                textAlign="left"
-                whiteSpace="break-spaces"
-              >
-                {"..."}
-              </Text>
-            </Button>
-          </VStack>
-          <VStack>
-            <Text as="b">{`Except:`}</Text>
-            <Button 
-              // flexDir="column" 
-              // alignItems="flex-start" 
-              // paddingLeft={5}
-            >
-              <Text 
-                noOfLines={5} 
-                textAlign="left"
-                whiteSpace="break-spaces"
-              >
-                {"..."}
-              </Text>
-            </Button>
+            </Box>
           </VStack>
 
+          <VStack>
+            <Text as="b">{`Error:`}</Text>
+            <Box bg="gray" p={2} w={250} borderRadius="10px">
+              <Text 
+                textAlign="left"
+                whiteSpace="break-spaces"
+              >
+                {tmpdirLog.error.length === 0 ? " " : tmpdirLog.error}
+              </Text>
+              </Box>
+          </VStack>
+
+          <VStack>
+            <Text as="b">{`Except:`}</Text>
+            <Box bg="gray" p={2} w={250} borderRadius="10px">
+              <Text 
+                textAlign="left"
+                whiteSpace="break-spaces"
+              >
+                {tmpdirLog.exception.length === 0 ? " " : tmpdirLog.exception}
+              </Text>
+            </Box>
+          </VStack>
         </Flex>
 
         <HStack m="auto" spacing={14}>
@@ -134,6 +147,7 @@ export const InprocessJob = () => {
         </HStack>
 
       </VStack>
+      )}
     </Layout>
   );
 };
