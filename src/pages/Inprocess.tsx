@@ -28,7 +28,10 @@ export const Inprocess = () => {
         <Flex h={1000}> 
           <VStack spacing='24px' p={5} >
             {jobs.map((j, index) => {
-              let jsonText = JSON.stringify(j["config"], undefined, 4);
+              let jsonText = "";
+              if (typeof j["config"] !== "undefined") {
+                jsonText = JSON.stringify(j["config"], undefined, 4);
+              }
               return (
                 <HStack key={index}>
                   <Button h={120}>
