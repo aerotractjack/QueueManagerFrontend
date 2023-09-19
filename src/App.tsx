@@ -5,6 +5,7 @@ import { Failed } from "./pages/Failed";
 import { NavBar } from "./components/NavBar";
 import { NoPage } from "./pages/NoPage";
 import { Element } from "./pages/Elements";
+import { InprocessJob } from "./pages/InprocessJob";
 
 export const App = () => {
 
@@ -17,6 +18,7 @@ export const App = () => {
           <Route path="inprocess" element={<Inprocess/>} />
           <Route path="failed" element={<Failed/>} />
           <Route path="waiting/:queue/:id" element={<Element/>} />
+          <Route path="inprocess/:id" element={<InprocessJob/>} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

@@ -50,6 +50,13 @@ export const Inprocess = () => {
                     alignItems="flex-start" 
                     paddingLeft={5}
                     onClick={() => {
+                      navigate(`/inprocess/${index}`, {
+                        state: {
+                          jobs,
+                          devices,
+                          index,
+                        }
+                      });
                     }}
                   >
                     <Text 
