@@ -28,10 +28,7 @@ export const Inprocess = () => {
         <Flex h={1000}> 
           <VStack spacing='24px' p={5} >
             {jobs.map((j, index) => {
-              let jsonText = "";
-              if (typeof j["config"] !== "undefined") {
-                jsonText = JSON.stringify(j["config"], undefined, 4);
-              }
+              let jsonText = JSON.stringify(j, undefined, 4);
               return (
                 <HStack key={index}>
                   <Button h={120}>
@@ -39,7 +36,14 @@ export const Inprocess = () => {
                       flexDir="column" 
                       alignItems="flex-start" 
                     >
-                      <Text>{`device ${devices[index]}`}</Text>
+                      <Text
+                        aria-valuetext={devices[index]}
+                        w={120}
+                        noOfLines={3} 
+                        whiteSpace="break-spaces"
+                      >
+                        {`device ${devices[index]}`}
+                      </Text>
                     </VStack>
                   </Button>
                   <Button 
