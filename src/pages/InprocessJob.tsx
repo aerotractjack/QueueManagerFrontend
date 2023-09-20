@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { VStack, IconButton, HStack, Stack, Text, Flex, Box } from "@chakra-ui/react";
+import { VStack, IconButton, HStack, Stack, Text, Flex, Box, Button } from "@chakra-ui/react";
 import { ArrowBackIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import JsonView from "@uiw/react-json-view";
 import { nordTheme } from "@uiw/react-json-view/nord";
@@ -17,6 +17,8 @@ export const InprocessJob = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [tmpdirLog, setTmpdirLog] = useState<TmpdirLog>({} as TmpdirLog);
+  const [tmpdirButtonSelected, setTmpdirButtonSelected] = useState<keyof TmpdirLog>("output");
+  const [tmpdirLogSelected, setTmpdirLogSelected] = useState("");
 
   let src = "";
   if (typeof state.jobs[state.index]["tmpdir"] !== "undefined") {
@@ -34,12 +36,25 @@ export const InprocessJob = () => {
       });
   }, [src]);
 
+  useEffect(() => {
+    if (Object.keys(tmpdirLog).length === 3) {
+      if (tmpdirButtonSelected === "output") {
+        setTmpdirLogSelected(tmpdirLog["output"]);
+      } else if (tmpdirButtonSelected === "error") {
+        setTmpdirLogSelected(tmpdirLog["error"]);
+      } else if (tmpdirButtonSelected === "exception") {
+        setTmpdirLogSelected(tmpdirLog["exception"]);
+      }
+    }
+  }, [tmpdirButtonSelected, tmpdirLog]);
+
   return (
     <Layout>
       {Object.keys(tmpdirLog).length !== 3 ? (
         <Text>{"loading..."}</Text>
       ) : (
       <VStack
+        pb={5}
         spacing={3}
         flexDir="column" 
         alignItems="flex-start" 
@@ -57,54 +72,53 @@ export const InprocessJob = () => {
 
         <Text as="b">{`Config:`}</Text>
 
-        <Stack w="100%">
-          <JsonView 
-            value={state.jobs[state.index]} 
-            displayObjectSize={false} 
-            displayDataTypes={false}
-            enableClipboard={true} 
-            collapsed={10} 
-            shortenTextAfterLength={120} 
-            style={{fontSize: "16px", padding: 10, borderRadius: "10px", ...nordTheme}}
-          />
-        </Stack>
+        <Flex gap="20px" alignItems="flex-start">
+          <Stack w="500px">
+            <JsonView 
+              value={state.jobs[state.index]} 
+              displayObjectSize={false} 
+              displayDataTypes={false}
+              enableClipboard={true} 
+              collapsed={10} 
+              shortenTextAfterLength={120} 
+              style={{fontSize: "16px", padding: 10, borderRadius: "10px", ...nordTheme}}
+            />
+          </Stack>
 
-        <Flex m="auto" gap={4}>
-          <VStack>
-            <Text as="b">{`Ouput:`}</Text>
-            <Box bg="gray" p={2} w={250} borderRadius="10px">
+          <Flex gap={4} flexDir="column">
+            <Flex justify="space-evenly">
+              <Button 
+                onClick={() => { setTmpdirButtonSelected("output") }}
+                isActive={tmpdirButtonSelected==="output"} 
+                _active={{bg:'pink', color: 'black', transform: 'scale(0.98)',}}  
+              >
+                {'Output'}
+              </Button>
+              <Button 
+                onClick={() => { setTmpdirButtonSelected("error") }}
+                isActive={tmpdirButtonSelected==="error"} 
+                _active={{bg:'pink', color: 'black', transform: 'scale(0.98)',}}  
+              >
+                {'Error'}
+              </Button>
+              <Button 
+                onClick={() => { setTmpdirButtonSelected("exception") }}
+                isActive={tmpdirButtonSelected==="exception"} 
+                _active={{bg:'pink', color: 'black', transform: 'scale(0.98)',}}  
+              >
+                {'Except'}
+              </Button>
+            </Flex>
+            
+            <Box bg="gray" p={2} borderRadius="10px" w="480px">
               <Text 
                 textAlign="left"
                 whiteSpace="break-spaces"
               >
-                {tmpdirLog.output.length === 0 ? " " : tmpdirLog.output}
+                {tmpdirLogSelected.length === 0 ? " " : tmpdirLogSelected}
               </Text>
             </Box>
-          </VStack>
-
-          <VStack>
-            <Text as="b">{`Error:`}</Text>
-            <Box bg="gray" p={2} w={250} borderRadius="10px">
-              <Text 
-                textAlign="left"
-                whiteSpace="break-spaces"
-              >
-                {tmpdirLog.error.length === 0 ? " " : tmpdirLog.error}
-              </Text>
-              </Box>
-          </VStack>
-
-          <VStack>
-            <Text as="b">{`Except:`}</Text>
-            <Box bg="gray" p={2} w={250} borderRadius="10px">
-              <Text 
-                textAlign="left"
-                whiteSpace="break-spaces"
-              >
-                {tmpdirLog.exception.length === 0 ? " " : tmpdirLog.exception}
-              </Text>
-            </Box>
-          </VStack>
+          </Flex>
         </Flex>
 
         <HStack m="auto" spacing={14}>
