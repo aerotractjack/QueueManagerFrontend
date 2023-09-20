@@ -93,78 +93,94 @@ export const Waiting = () => {
             ) : jobs[currentQueue].map((j, index) => {
               let jsonText = JSON.stringify(j, undefined, 4);
               return (
-                <HStack key={index}>
-                  <VStack >
-                    <IconButton
-                      aria-label='Move upward'
-                      icon={<TriangleUpIcon/>}
-                      size='s'
-                      p={1}
-                      fontSize="15px"
-                      isDisabled={index===0}
-                      onClick={() => { 
-                        swapJob(currentQueue, jobNames[currentQueue][index], currentQueue, jobNames[currentQueue][index-1], index , index-1); 
-                      }}
-                    />
-                    <IconButton
-                      aria-label='Move downward'
-                      icon={<TriangleDownIcon/>}
-                      size='s'
-                      p={1}
-                      fontSize="15px"
-                      isDisabled={index===jobNames[currentQueue].length-1}
-                      onClick={() => { 
-                        swapJob(currentQueue, jobNames[currentQueue][index], currentQueue, jobNames[currentQueue][index+1], index, index+1); 
-                      }}
-                    />
-                    <PopoverForm 
-                      queues={queues} 
-                      currentQueue={currentQueue} 
-                      currentJobName={jobNames[currentQueue][index]}
-                      iconSize="xs"
-                      iconFontSize={15}
-                    />
-                  </VStack>
-                  <Button h={120}>
-                    <VStack
+                <VStack key={index}>
+                  <HStack w="100%" pl={8}>
+                    {Object.keys(j).map((key, index) => {
+                      if (index !== Object.keys(j).length-1) {
+                        return (
+                          <Text as="b" key={"title" + index}>{key + " → "}</Text>
+                        );
+                      } else {
+                        return (
+                          <Text as="b" key={"title" + index}>{key}</Text>
+                        );
+                      }
+                    })}
+                  </HStack>
+
+                  <HStack key={index}>
+                    <VStack >
+                      <IconButton
+                        aria-label='Move upward'
+                        icon={<TriangleUpIcon/>}
+                        size='s'
+                        p={1}
+                        fontSize="15px"
+                        isDisabled={index===0}
+                        onClick={() => { 
+                          swapJob(currentQueue, jobNames[currentQueue][index], currentQueue, jobNames[currentQueue][index-1], index , index-1); 
+                        }}
+                      />
+                      <IconButton
+                        aria-label='Move downward'
+                        icon={<TriangleDownIcon/>}
+                        size='s'
+                        p={1}
+                        fontSize="15px"
+                        isDisabled={index===jobNames[currentQueue].length-1}
+                        onClick={() => { 
+                          swapJob(currentQueue, jobNames[currentQueue][index], currentQueue, jobNames[currentQueue][index+1], index, index+1); 
+                        }}
+                      />
+                      <PopoverForm 
+                        queues={queues} 
+                        currentQueue={currentQueue} 
+                        currentJobName={jobNames[currentQueue][index]}
+                        iconSize="xs"
+                        iconFontSize={15}
+                      />
+                    </VStack>
+                    <Button h={120}>
+                      <VStack
+                        flexDir="column" 
+                        alignItems="flex-start" 
+                      >
+                        <Text>{`index ${index}`}</Text>
+                        <Text>{`filename ${jobNames[currentQueue][index]}`}</Text>
+                      </VStack>
+                    </Button>
+                    <Button 
+                      key={index} 
+                      w={600} 
+                      h={120} 
                       flexDir="column" 
                       alignItems="flex-start" 
+                      paddingLeft={5}
+                      onClick={() => {
+                        navigate(`/waiting/${currentQueue}/${index}`, {
+                          state: {
+                            jsonText, 
+                            queues,
+                            currentQueue,
+                            jobNames,
+                            currentJobName: jobNames[currentQueue][index],
+                            jobs,
+                            index,
+                          }
+                        });
+                      }}
                     >
-                      <Text>{`index ${index}`}</Text>
-                      <Text>{`filename ${jobNames[currentQueue][index]}`}</Text>
-                    </VStack>
-                  </Button>
-                  <Button 
-                    key={index} 
-                    w={600} 
-                    h={120} 
-                    flexDir="column" 
-                    alignItems="flex-start" 
-                    paddingLeft={5}
-                    onClick={() => {
-                      navigate(`/waiting/${currentQueue}/${index}`, {
-                        state: {
-                          jsonText, 
-                          queues,
-                          currentQueue,
-                          jobNames,
-                          currentJobName: jobNames[currentQueue][index],
-                          jobs,
-                          index,
-                        }
-                      });
-                    }}
-                  >
-                    <Text 
-                      w={580}
-                      noOfLines={5} 
-                      textAlign="left"
-                      whiteSpace="break-spaces"
-                    >
-                      {jsonText.length < 120 ? jsonText : jsonText.substring(0, 120)+" ..."}
-                    </Text>
-                  </Button>
-                </HStack>
+                      <Text 
+                        w={580}
+                        noOfLines={5} 
+                        textAlign="left"
+                        whiteSpace="break-spaces"
+                      >
+                        {jsonText.length < 120 ? jsonText : jsonText.substring(0, 120)+" ..."}
+                      </Text>
+                    </Button>
+                  </HStack>
+                </VStack>
               );
             })}
           </VStack>
