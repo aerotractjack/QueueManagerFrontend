@@ -11,7 +11,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Box
         mt={8}
         mx="auto"
-        maxW="800px"
+        maxW="1000px"
         w="100%"
       >
         {children}
