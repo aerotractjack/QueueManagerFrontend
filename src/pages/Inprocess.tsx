@@ -25,7 +25,7 @@ export const Inprocess = () => {
       {jobs.length === 0 ? (
         <Text>{"There's no inprocess queue, or the server is not running."}</Text>
       ) : (
-        <Flex h={1000}> 
+        <Flex> 
           <VStack spacing='24px' pb={5} >
             {jobs.map((j, index) => {
               let jsonText = JSON.stringify(j, undefined, 4);
