@@ -141,6 +141,7 @@ export const Waiting = () => {
                         iconFontSize={15}
                       />
                       <DeletePopoverForm
+                        page="w"
                         queue_name={currentQueue}
                         item_name={jobNames[currentQueue][index]}
                       />

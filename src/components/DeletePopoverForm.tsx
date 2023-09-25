@@ -4,12 +4,22 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { fetchWrapper } from "../utils/fetchWrapper";
 
 interface DeletePopoverFormProps {
-  queue_name: string
-  item_name: string 
+  page: string
+  queue_name?: string
+  device_name?: string
+  item_name?: string
 }
 
-const deleteTheJob = (queue_name: string, item_name: string) => {
-  fetchWrapper._delete(`http://localhost:7088/waiting_queue_items/${queue_name}/${item_name}`)
+const deleteTheJob = (page: string, queue_name?: string, device_name?: string, item_name?: string) => {
+  let url = "";
+  if (page === "w") {
+    url = `http://localhost:7088/waiting_queue_items/${queue_name}/${item_name}`;
+  } else if (page === "i") {
+    url = `http://localhost:7088/inprocess_queue_items/${device_name}`;
+  } else if (page === "f") {
+    url = `http://localhost:7088/failed_queue_items/${item_name}`;
+  }
+  fetchWrapper._delete(url)
     .then(({ data }) => {
       console.log(data.success);
     })
@@ -18,7 +28,7 @@ const deleteTheJob = (queue_name: string, item_name: string) => {
   });
 };
 
-export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ queue_name, item_name }) => {
+export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ page, queue_name, device_name, item_name }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Popover
@@ -33,10 +43,12 @@ export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ queue_name
         <IconButton
           aria-label="Delete"
           icon={<DeleteIcon/>}
-          size='s'
+          size='xs'
           p={1}
           variant="link"
           colorScheme="red"
+          isRound={true}
+          style={{border: "solid"}}
         />
       </PopoverTrigger>
       
@@ -57,7 +69,7 @@ export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ queue_name
             <Button 
               colorScheme='red'
               onClick={() => {
-                deleteTheJob(queue_name, item_name);
+                deleteTheJob( page, queue_name, device_name, item_name );
                 window.location.reload();
               }}
             >

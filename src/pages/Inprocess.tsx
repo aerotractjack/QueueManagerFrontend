@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Text, HStack, Flex, VStack, Button } from "@chakra-ui/react";
 import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
+import { DeletePopoverForm } from "../components/DeletePopoverForm";
 
 export const Inprocess = () => {
   const navigate = useNavigate();
@@ -34,65 +35,72 @@ export const Inprocess = () => {
                 configTitles = Object.keys(j["config"]);
               }
               return (
-                <VStack key={index}>
-                  <HStack w="100%" key={"title" + index}>
-                    {configTitles.map((key, index) => {
-                      if (index !== configTitles.length-1) {
-                        return (
-                          <Text as="b" key={"title" + index}>{key + " → "}</Text>
-                        );
-                      } else {
-                        return (
-                          <Text as="b" key={"title" + index}>{key}</Text>
-                        );
-                      }
-                    })}
-                  </HStack>
+                <HStack key={index}>
+                  <DeletePopoverForm
+                    page="i"
+                    device_name={devices[index]}
+                  />
 
-                  <HStack key={index}>
-                    <Button h={120}>
-                      <VStack
+                  <VStack key={index}>
+                    <HStack w="100%" key={"title" + index}>
+                      {configTitles.map((key, index) => {
+                        if (index !== configTitles.length-1) {
+                          return (
+                            <Text as="b" key={"title" + index}>{key + " → "}</Text>
+                          );
+                        } else {
+                          return (
+                            <Text as="b" key={"title" + index}>{key}</Text>
+                          );
+                        }
+                      })}
+                    </HStack>
+
+                    <HStack key={index}>
+                      <Button h={120}>
+                        <VStack
+                          flexDir="column" 
+                          alignItems="flex-start" 
+                        >
+                          <Text
+                            aria-valuetext={devices[index]}
+                            w={120}
+                            noOfLines={3} 
+                            whiteSpace="break-spaces"
+                          >
+                            {`device ${devices[index]}`}
+                          </Text>
+                        </VStack>
+                      </Button>
+                      <Button 
+                        key={index} 
+                        w={600} 
+                        h={120} 
                         flexDir="column" 
                         alignItems="flex-start" 
+                        paddingLeft={5}
+                        onClick={() => {
+                          navigate(`/inprocess/${index}`, {
+                            state: {
+                              jobs,
+                              devices,
+                              index,
+                            }
+                          });
+                        }}
                       >
-                        <Text
-                          aria-valuetext={devices[index]}
-                          w={120}
-                          noOfLines={3} 
+                        <Text 
+                          w={580}
+                          noOfLines={5} 
+                          textAlign="left"
                           whiteSpace="break-spaces"
                         >
-                          {`device ${devices[index]}`}
+                          {jsonText.length < 120 ? jsonText : jsonText.substring(0, 120)+" ..."}
                         </Text>
-                      </VStack>
-                    </Button>
-                    <Button 
-                      key={index} 
-                      w={600} 
-                      h={120} 
-                      flexDir="column" 
-                      alignItems="flex-start" 
-                      paddingLeft={5}
-                      onClick={() => {
-                        navigate(`/inprocess/${index}`, {
-                          state: {
-                            jobs,
-                            devices,
-                            index,
-                          }
-                        });
-                      }}
-                    >
-                      <Text 
-                        w={580}
-                        noOfLines={5} 
-                        textAlign="left"
-                        whiteSpace="break-spaces"
-                      >
-                        {jsonText.length < 120 ? jsonText : jsonText.substring(0, 120)+" ..."}
-                      </Text>
-                    </Button>
-                  </HStack>
-                </VStack>
+                      </Button>
+                    </HStack>
+                  </VStack>
+                </HStack>
               );
             })}
           </VStack>
