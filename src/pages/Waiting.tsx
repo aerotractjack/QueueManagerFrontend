@@ -5,6 +5,7 @@ import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons';
 import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
 import PopoverForm from "../components/PopoverForm";
+import { DeletePopoverForm } from "../components/DeletePopoverForm";
 
 export const Waiting = () => {
   const navigate = useNavigate();
@@ -138,6 +139,11 @@ export const Waiting = () => {
                         currentJobName={jobNames[currentQueue][index]}
                         iconSize="xs"
                         iconFontSize={15}
+                      />
+                      <DeletePopoverForm
+                        page="w"
+                        queue_name={currentQueue}
+                        item_name={jobNames[currentQueue][index]}
                       />
                     </VStack>
                     <Button h={120}>
