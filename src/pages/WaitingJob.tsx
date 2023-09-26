@@ -7,7 +7,7 @@ import JsonView from '@uiw/react-json-view';
 import { nordTheme } from '@uiw/react-json-view/nord';
 import { DeletePopoverForm } from "../components/DeletePopoverForm";
 
-export const Element = () => {
+export const WaitingJob = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { queue, id } = useParams();
