@@ -4,7 +4,7 @@ import { Waiting } from "./pages/Waiting";
 import { Failed } from "./pages/Failed";
 import { NavBar } from "./components/NavBar";
 import { NoPage } from "./pages/NoPage";
-import { Element } from "./pages/Elements";
+import { WaitingJob } from "./pages/WaitingJob";
 import { InprocessJob } from "./pages/InprocessJob";
 import { FailedJob } from "./pages/FailedJob";
 
@@ -18,7 +18,7 @@ export const App = () => {
           <Route path="waiting" element={<Waiting/>} />
           <Route path="inprocess" element={<Inprocess/>} />
           <Route path="failed" element={<Failed/>} />
-          <Route path="waiting/:queue/:id" element={<Element/>} />
+          <Route path="waiting/:queue/:id" element={<WaitingJob/>} />
           <Route path="inprocess/:id" element={<InprocessJob/>} />
           <Route path="failed/:id" element={<FailedJob/>} />
           <Route path="*" element={<NoPage />} />

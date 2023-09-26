@@ -5,8 +5,9 @@ import { ArrowBackIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/ico
 import PopoverForm from "../components/PopoverForm";
 import JsonView from '@uiw/react-json-view';
 import { nordTheme } from '@uiw/react-json-view/nord';
+import { DeletePopoverForm } from "../components/DeletePopoverForm";
 
-export const Element = () => {
+export const WaitingJob = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { queue, id } = useParams();
@@ -54,11 +55,6 @@ export const Element = () => {
         </Stack>
 
         <HStack m="auto" spacing={14}>
-          <PopoverForm 
-            queues={state.queues} 
-            currentQueue={state.currentQueue} 
-            currentJobName={state.currentJobName}
-          />
           <HStack spacing={3}>
             <IconButton 
               aria-label="browse previous one" 
@@ -101,6 +97,20 @@ export const Element = () => {
                   }
                 });
               }}
+            />
+          </HStack>
+          
+          <HStack spacing={3}>
+            <PopoverForm 
+              queues={state.queues} 
+              currentQueue={state.currentQueue} 
+              currentJobName={state.currentJobName}
+            />
+            <DeletePopoverForm
+              page="w"
+              queue_name={state.currentQueue}
+              item_name={state.jobNames[state.currentQueue][state.index]}
+              iconSize="md"
             />
           </HStack>
         </HStack>
