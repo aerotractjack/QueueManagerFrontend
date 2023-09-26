@@ -2,12 +2,14 @@ import React from "react";
 import { Button, ButtonGroup, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, useDisclosure } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { fetchWrapper } from "../utils/fetchWrapper";
+import { useNavigate } from "react-router-dom";
 
 interface DeletePopoverFormProps {
   page: string
   queue_name?: string
   device_name?: string
   item_name?: string
+  iconSize?: string
 }
 
 const deleteTheJob = (page: string, queue_name?: string, device_name?: string, item_name?: string) => {
@@ -28,8 +30,9 @@ const deleteTheJob = (page: string, queue_name?: string, device_name?: string, i
   });
 };
 
-export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ page, queue_name, device_name, item_name }) => {
+export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ page, queue_name, device_name, item_name, iconSize="xs"}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
   return (
     <Popover
       isOpen={isOpen}
@@ -43,8 +46,8 @@ export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ page, queu
         <IconButton
           aria-label="Delete"
           icon={<DeleteIcon/>}
-          size='xs'
-          p={1}
+          size={iconSize}
+          p={iconSize==="xs" ? 1 : 3}
           variant="link"
           colorScheme="red"
           isRound={true}
@@ -64,12 +67,19 @@ export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ page, queu
         </PopoverBody>
 
         <PopoverFooter display='flex' justifyContent='flex-end'>
-          <ButtonGroup size='sm'>
+          <ButtonGroup>
             <Button variant='outline' onClick={onClose}>Cancel</Button>
             <Button 
               colorScheme='red'
               onClick={() => {
                 deleteTheJob( page, queue_name, device_name, item_name );
+                if (page === "w") {
+                  navigate("/waiting");
+                } else if (page === "i") {
+                  navigate("/inprocess");
+                } else if (page === "f") {
+                  navigate("/failed");
+                }
                 window.location.reload();
               }}
             >

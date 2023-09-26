@@ -6,6 +6,7 @@ import { nordTheme } from "@uiw/react-json-view/nord";
 import { Layout } from "../components/Layout";
 import { useEffect, useState } from "react";
 import { fetchWrapper } from "../utils/fetchWrapper";
+import { DeletePopoverForm } from "../components/DeletePopoverForm";
 
 interface TmpdirLog {
   error: string 
@@ -158,6 +159,12 @@ export const InprocessJob = () => {
               }}
             />
           </HStack>
+
+          <DeletePopoverForm
+            page="i"
+            device_name={state.devices[state.index]}
+            iconSize="md"
+          />
         </HStack>
 
       </VStack>

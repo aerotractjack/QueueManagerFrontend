@@ -6,6 +6,7 @@ import JsonView from "@uiw/react-json-view";
 import { nordTheme } from "@uiw/react-json-view/nord";
 import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
+import { DeletePopoverForm } from "../components/DeletePopoverForm";
 
 interface TmpdirLog {
   error: string 
@@ -158,6 +159,12 @@ export const FailedJob = () => {
               }}
             />
           </HStack>
+          
+          <DeletePopoverForm
+            page="f"
+            item_name={state.jobNames[state.index]}
+            iconSize="md"
+          />
         </HStack>
 
       </VStack>
