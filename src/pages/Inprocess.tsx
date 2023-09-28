@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Text, HStack, Flex, VStack, Button } from "@chakra-ui/react";
 import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
-import { DeletePopoverForm } from "../components/DeletePopoverForm";
 
 export const Inprocess = () => {
   const navigate = useNavigate();
@@ -36,11 +35,6 @@ export const Inprocess = () => {
               }
               return (
                 <HStack key={index}>
-                  <DeletePopoverForm
-                    page="i"
-                    device_name={devices[index]}
-                  />
-
                   <VStack key={index}>
                     <HStack w="100%" key={"title" + index}>
                       {configTitles.map((key, index) => {

@@ -8,6 +8,7 @@ export const fetchWrapper = {
 function get(url: string) {
   const reqOptions = {
     method: "GET",
+    mode: "cors",
   } as any;
   return fetch(url, reqOptions).then(handleRes);
 }
@@ -26,7 +27,6 @@ function _delete(url: string) {
   const reqOptions = {
     method: "DELETE",
     mode: "cors",
-    headers: { "Content-Type": "application/json", },
   } as any;
   return fetch(url, reqOptions).then(handleRes);
 }

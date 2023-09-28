@@ -20,6 +20,8 @@ const deleteTheJob = (page: string, queue_name?: string, device_name?: string, i
     url = `http://localhost:7088/inprocess_queue_items/${device_name}`;
   } else if (page === "f") {
     url = `http://localhost:7088/failed_queue_items/${item_name}`;
+  } else if (page === "c") {
+    url = `http://localhost:7088/completed_queue_items/${item_name}`;
   }
   fetchWrapper._delete(url)
     .then(({ data }) => {
@@ -30,7 +32,7 @@ const deleteTheJob = (page: string, queue_name?: string, device_name?: string, i
   });
 };
 
-export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ page, queue_name, device_name, item_name, iconSize="xs"}) => {
+export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ page, queue_name, device_name, item_name, iconSize="xs" }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   return (
@@ -73,13 +75,21 @@ export const DeletePopoverForm: React.FC<DeletePopoverFormProps> = ({ page, queu
               colorScheme='red'
               onClick={() => {
                 deleteTheJob( page, queue_name, device_name, item_name );
+                let url = "";
                 if (page === "w") {
-                  navigate("/waiting");
+                  url = "/waiting";
                 } else if (page === "i") {
-                  navigate("/inprocess");
+                  url = "/inprocess";
                 } else if (page === "f") {
-                  navigate("/failed");
+                  url = "/failed";
+                } else if (page === "c") {
+                  url = "/completed";
                 }
+                navigate(url, {
+                  state: {
+                    reload: true,
+                  }
+                });
                 window.location.reload();
               }}
             >

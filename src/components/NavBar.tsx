@@ -10,7 +10,7 @@ interface NavBarProps {
 export const NavBar: React.FC<NavBarProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const pages = ["waiting", "inprocess", "failed"];
+  const pages = ["waiting", "inprocess", "failed", "completed"];
   const [currentPage, setCurrentPage] = useState("");
   useEffect(() => {
     setCurrentPage(location.pathname.substring(1));
@@ -60,6 +60,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         </Button>
         <Button
           w={120} 
+          marginRight={5}
           onClick={() => { setCurrentPage(pages[2]); navigate("/failed"); }} 
           bg="#89969F"
           color="white"
@@ -67,6 +68,16 @@ export const NavBar: React.FC<NavBarProps> = () => {
           _active={{bg:'pink', color: 'black', transform: 'scale(0.98)',}}
         >
           {"Failed"}
+        </Button>
+        <Button
+          w={120} 
+          onClick={() => { setCurrentPage(pages[2]); navigate("/completed"); }} 
+          bg="#89969F"
+          color="white"
+          isActive={currentPage===pages[3]} 
+          _active={{bg:'pink', color: 'black', transform: 'scale(0.98)',}}
+        >
+          {"Completed"}
         </Button>
       </Flex>
     </Flex>
