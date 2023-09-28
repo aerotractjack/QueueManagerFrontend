@@ -7,6 +7,8 @@ import { NoPage } from "./NoPage";
 import { WaitingJob } from "./WaitingJob";
 import { InprocessJob } from "./InprocessJob";
 import { FailedJob } from "./FailedJob";
+import { Completed } from "./Completed";
+import { CompletedJob } from "./CompletedJob";
 
 export const App = () => {
 
@@ -18,9 +20,11 @@ export const App = () => {
           <Route path="waiting" element={<Waiting/>} />
           <Route path="inprocess" element={<Inprocess/>} />
           <Route path="failed" element={<Failed/>} />
+          <Route path="completed" element={ <Completed/>} />
           <Route path="waiting/:queue/:id" element={<WaitingJob/>} />
           <Route path="inprocess/:id" element={<InprocessJob/>} />
           <Route path="failed/:id" element={<FailedJob/>} />
+          <Route path="completed/:id" element={<CompletedJob/>} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
