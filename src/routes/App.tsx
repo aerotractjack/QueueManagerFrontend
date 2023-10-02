@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Inprocess } from "./Inprocess";
-import { Waiting } from "./Waiting";
-import { Failed } from "./Failed";
+import { Inprocess } from "../pages/Inprocess";
+import { Waiting } from "../pages/Waiting";
+import { Failed } from "../pages/Failed";
 import { NavBar } from "../components/NavBar";
-import { NoPage } from "./NoPage";
-import { WaitingJob } from "./WaitingJob";
-import { InprocessJob } from "./InprocessJob";
-import { FailedJob } from "./FailedJob";
-import { Completed } from "./Completed";
-import { CompletedJob } from "./CompletedJob";
+import { NoPage } from "../pages/NoPage";
+import { WaitingJob } from "../pages/WaitingJob";
+import { InprocessJob } from "../pages/InprocessJob";
+import { FailedJob } from "../pages/FailedJob";
+import { Completed } from "../pages/Completed";
+import { CompletedJob } from "../pages/CompletedJob";
 
 export const App = () => {
 

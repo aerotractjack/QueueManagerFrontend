@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Text, HStack, Flex, VStack, Button } from "@chakra-ui/react";
 import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
+import { useColors } from "../hooks/useColors";
+import { jobButtonColor } from "../utils/jobButtonColor";
 
 export const Inprocess = () => {
   const navigate = useNavigate();
   const [jobs, setJobs] = useState<any[]>([]);
   const [devices, setDevices] = useState<string[]>([]);
+  const [colors] = useColors();
 
   useEffect(() => {
     fetchWrapper.get("http://localhost:7088/read_inprocess_queue_items")
@@ -29,29 +32,34 @@ export const Inprocess = () => {
           <VStack spacing='24px' pb={5} >
             {jobs.map((j, index) => {
               let jsonText = JSON.stringify(j, undefined, 4);
-              let configTitles: any[] = [];
+              let titles: any[] = [];
               if (typeof j["config"] !== "undefined") {
-                configTitles = Object.keys(j["config"]);
+                titles = Object.keys(j["config"]);
               }
+              let nTitles = titles.length;
+
+              let buttonColor = jobButtonColor(nTitles, titles, colors);
+              let titleText = "";
+              for (let i = 0; i < nTitles; ++i) {
+                if (i !== nTitles-1) {
+                  titleText += titles[i] + " → ";
+                } else {
+                  titleText += titles[i];
+                }
+              }
+
               return (
                 <HStack key={index}>
                   <VStack key={index}>
                     <HStack w="100%" key={"title" + index}>
-                      {configTitles.map((key, index) => {
-                        if (index !== configTitles.length-1) {
-                          return (
-                            <Text as="b" key={"title" + index}>{key + " → "}</Text>
-                          );
-                        } else {
-                          return (
-                            <Text as="b" key={"title" + index}>{key}</Text>
-                          );
-                        }
-                      })}
+                      <Text as="b">{titleText}</Text>
                     </HStack>
 
                     <HStack key={index}>
-                      <Button h={120}>
+                      <Button 
+                        h={120}
+                        bg={buttonColor}
+                      >
                         <VStack
                           flexDir="column" 
                           alignItems="flex-start" 
@@ -70,6 +78,7 @@ export const Inprocess = () => {
                         key={index} 
                         w={600} 
                         h={120} 
+                        bg={buttonColor}
                         flexDir="column" 
                         alignItems="flex-start" 
                         paddingLeft={5}
