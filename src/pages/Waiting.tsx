@@ -7,6 +7,7 @@ import { fetchWrapper } from "../utils/fetchWrapper";
 import PopoverForm from "../components/PopoverForm";
 import { DeletePopoverForm } from "../components/DeletePopoverForm";
 import { randomLightColor } from "../utils/randomLightColor";
+import { useColors } from "../hooks/useColors";
 
 export const Waiting = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export const Waiting = () => {
   const [currentQueue, setCurrentQueue] = useState("");
   const [jobs, setJobs] = useState<Record<string, any[]>>({});
   const [jobNames, setJobNames] = useState<Record<string, any[]>>({});
-  const [colors, setColors] = useState<Record<string, string>>({"dummyKey": ""});
+  const [colors] = useColors();
 
   useEffect(() => {
     fetchWrapper.get("http://localhost:7088/list_waiting_queues")
@@ -44,16 +45,6 @@ export const Waiting = () => {
         });
     })
   }, [queues]);
-
-  useEffect(() => {
-    fetchWrapper.get("http://localhost:7088/colors")
-      .then(({data}) => {
-        setColors(data);
-      })
-      .catch((err) => { 
-        console.log(err); 
-      });
-  }, []);
 
   const swapJob = (a: string, a_num: number, b: string, b_num: number, a_index: number, b_index: number) => {
     let jsonData = { a, a_num, b, b_num };
