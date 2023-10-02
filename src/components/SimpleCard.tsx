@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { VStack, HStack, Button, Text } from "@chakra-ui/react";
 import { DeletePopoverForm } from "./DeletePopoverForm";
+import { jobButtonColor } from "../utils/jobButtonColor";
+import { useColors } from "../hooks/useColors";
 
 interface SimpleCardProps {
   page: string 
@@ -11,11 +13,24 @@ interface SimpleCardProps {
 
 export const SimpleCard: React.FC<SimpleCardProps> = ({ page, jobs, jobNames, index }) => {
   const navigate = useNavigate();
+  const [colors] = useColors();
+
   let j = jobs[index];
   let jsonText = JSON.stringify(j, undefined, 4);
-  let configTitles: any[] = [];
+  let titles: any[] = [];
   if (typeof j["input"] !== "undefined" && typeof j["input"]["config"] !== "undefined") {
-    configTitles = Object.keys(j["input"]["config"]);
+    titles = Object.keys(j["input"]["config"]);
+  }
+  let nTitles = titles.length;
+
+  let buttonColor = jobButtonColor(nTitles, titles, colors);
+  let titleText = "";
+  for (let i = 0; i < nTitles; ++i) {
+    if (i !== nTitles-1) {
+      titleText += titles[i] + " → ";
+    } else {
+      titleText += titles[i];
+    }
   }
   return (
     <HStack key={index}>
@@ -26,21 +41,14 @@ export const SimpleCard: React.FC<SimpleCardProps> = ({ page, jobs, jobNames, in
 
       <VStack key={index}>
         <HStack w="100%" key={"title" + index}>
-          {configTitles.map((key, index) => {
-            if (index !== configTitles.length-1) {
-              return (
-                <Text as="b" key={"title" + index}>{key + " → "}</Text>
-              );
-            } else {
-              return (
-                <Text as="b" key={"title" + index}>{key}</Text>
-              );
-            }
-          })}
+          <Text as="b">{titleText}</Text>
         </HStack>
 
         <HStack key={index}>
-          <Button h={120}>
+          <Button 
+            h={120}
+            bg={buttonColor}
+          >
             <VStack
               flexDir="column" 
               alignItems="flex-start" 
@@ -59,14 +67,17 @@ export const SimpleCard: React.FC<SimpleCardProps> = ({ page, jobs, jobNames, in
             key={index} 
             w={600} 
             h={120} 
+            bg={buttonColor}
             flexDir="column" 
             alignItems="flex-start" 
             paddingLeft={5}
             onClick={() => {
               let url = "";
-              if (page === "c") {
+              if (page === "f") {
+                url = `/failed/${index}`;
+              } else if (page === "c") {
                 url = `/completed/${index}`;
-              }
+              } 
               navigate(url, {
                 state: {
                   jobs,

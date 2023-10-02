@@ -6,8 +6,8 @@ import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
 import PopoverForm from "../components/PopoverForm";
 import { DeletePopoverForm } from "../components/DeletePopoverForm";
-import { randomLightColor } from "../utils/randomLightColor";
 import { useColors } from "../hooks/useColors";
+import { jobButtonColor } from "../utils/jobButtonColor";
 
 export const Waiting = () => {
   const navigate = useNavigate();
@@ -99,20 +99,8 @@ export const Waiting = () => {
 
               let titles = Object.keys(j);
               let nTitles = Object.keys(j).length;
-              let middleTitle = "";
-              if (nTitles === 0) {
-                middleTitle = "";
-              } else if (nTitles === 2) {
-                middleTitle = titles[0];
-              } else {
-                middleTitle = titles[Math.floor(nTitles/2)];
-              }
 
-              let buttonColor = randomLightColor();
-              if (typeof colors[middleTitle] !== "undefined") {
-                buttonColor = colors[middleTitle];
-              }
-
+              let buttonColor = jobButtonColor(nTitles, titles, colors);
               let titleText = "";
               for (let i = 0; i < nTitles; ++i) {
                 if (i !== nTitles-1) {
