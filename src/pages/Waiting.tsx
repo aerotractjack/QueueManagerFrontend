@@ -6,6 +6,7 @@ import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
 import PopoverForm from "../components/PopoverForm";
 import { DeletePopoverForm } from "../components/DeletePopoverForm";
+import { randomLightColor } from "../utils/randomLightColor";
 
 export const Waiting = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export const Waiting = () => {
   const [currentQueue, setCurrentQueue] = useState("");
   const [jobs, setJobs] = useState<Record<string, any[]>>({});
   const [jobNames, setJobNames] = useState<Record<string, any[]>>({});
+  const [colors, setColors] = useState<Record<string, string>>({"dummyKey": ""});
 
   useEffect(() => {
     fetchWrapper.get("http://localhost:7088/list_waiting_queues")
@@ -43,6 +45,16 @@ export const Waiting = () => {
     })
   }, [queues]);
 
+  useEffect(() => {
+    fetchWrapper.get("http://localhost:7088/colors")
+      .then(({data}) => {
+        setColors(data);
+      })
+      .catch((err) => { 
+        console.log(err); 
+      });
+  }, []);
+
   const swapJob = (a: string, a_num: number, b: string, b_num: number, a_index: number, b_index: number) => {
     let jsonData = { a, a_num, b, b_num };
     fetchWrapper.post("http://localhost:7088/swap_waiting_q_items", jsonData)
@@ -62,7 +74,7 @@ export const Waiting = () => {
     <Layout>
       {queues.length === 0 ? (
         <Text>{"There's no waiting queue, or the server is not running."}</Text>
-      ) : typeof jobs[queues[0]] === 'undefined' || queues.length !== Object.keys(jobs).length ? (
+      ) : typeof jobs[queues[0]] === 'undefined' || queues.length !== Object.keys(jobs).length || typeof colors["dummyKey"] !== "undefined" ? (
         <Text>{"Loading..."}</Text>
       ) : (
         <Flex h={1000}> 
@@ -93,20 +105,36 @@ export const Waiting = () => {
               <Text>{"Select a queue to view its items"}</Text>
             ) : jobs[currentQueue].map((j, index) => {
               let jsonText = JSON.stringify(j, undefined, 4);
+
+              let titles = Object.keys(j);
+              let nTitles = Object.keys(j).length;
+              let middleTitle = "";
+              if (nTitles === 0) {
+                middleTitle = "";
+              } else if (nTitles === 2) {
+                middleTitle = titles[0];
+              } else {
+                middleTitle = titles[Math.floor(nTitles/2)];
+              }
+
+              let buttonColor = randomLightColor();
+              if (typeof colors[middleTitle] !== "undefined") {
+                buttonColor = colors[middleTitle];
+              }
+
+              let titleText = "";
+              for (let i = 0; i < nTitles; ++i) {
+                if (i !== nTitles-1) {
+                  titleText += titles[i] + " → ";
+                } else {
+                  titleText += titles[i];
+                }
+              }
+
               return (
                 <VStack key={index}>
                   <HStack w="100%" pl={8}>
-                    {Object.keys(j).map((key, index) => {
-                      if (index !== Object.keys(j).length-1) {
-                        return (
-                          <Text as="b" key={"title" + index}>{key + " → "}</Text>
-                        );
-                      } else {
-                        return (
-                          <Text as="b" key={"title" + index}>{key}</Text>
-                        );
-                      }
-                    })}
+                    <Text as="b">{titleText}</Text>
                   </HStack>
 
                   <HStack key={index}>
@@ -146,7 +174,11 @@ export const Waiting = () => {
                         item_name={jobNames[currentQueue][index]}
                       />
                     </VStack>
-                    <Button h={120}>
+
+                    <Button 
+                      h={120} 
+                      bg={buttonColor}
+                    >
                       <VStack
                         flexDir="column" 
                         alignItems="flex-start" 
@@ -155,10 +187,12 @@ export const Waiting = () => {
                         <Text>{`filename ${jobNames[currentQueue][index]}`}</Text>
                       </VStack>
                     </Button>
+
                     <Button 
                       key={index} 
                       w={600} 
                       h={120} 
+                      bg={buttonColor}
                       flexDir="column" 
                       alignItems="flex-start" 
                       paddingLeft={5}
