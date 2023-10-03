@@ -4,12 +4,14 @@ import { useLocation } from "react-router-dom";
 import { SimpleCard } from "../components/SimpleCard";
 import { Layout } from "../components/Layout";
 import { fetchWrapper } from "../utils/fetchWrapper";
+import { useColors } from "../hooks/useColors";
 
 export const Completed = () => {
   const { state } = useLocation();
   const [jobs, setJobs] = useState<any[]>([]);
   const [jobNames, setJobNames] = useState<string[]>([]);
   const [reload, setReload] = useState(false);
+  const [colors] = useColors();
 
   useEffect(() => {
     if (typeof state?.reload !== "undefined" && state.reload) {
@@ -43,6 +45,7 @@ export const Completed = () => {
                   jobs={jobs}
                   jobNames={jobNames}
                   index={index}
+                  colors={colors}
                 />
               );
             })}

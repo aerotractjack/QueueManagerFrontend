@@ -2,11 +2,13 @@ import { Flex, VStack, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Layout } from "../components/Layout";
 import { SimpleCard } from "../components/SimpleCard";
+import { useColors } from "../hooks/useColors";
 import { fetchWrapper } from "../utils/fetchWrapper";
 
 export const Failed = () => {
   const [jobs, setJobs] = useState<any[]>([]);
   const [jobNames, setJobNames] = useState<string[]>([]);
+  const [colors] = useColors();
 
   useEffect(() => {
     fetchWrapper.get("http://localhost:7088/read_failed_queue_items")
@@ -34,6 +36,7 @@ export const Failed = () => {
                   jobs={jobs}
                   jobNames={jobNames}
                   index={index}
+                  colors={colors}
                 />
               );
             })}
