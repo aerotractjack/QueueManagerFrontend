@@ -2,18 +2,17 @@ import { useNavigate } from "react-router-dom";
 import { VStack, HStack, Button, Text } from "@chakra-ui/react";
 import { DeletePopoverForm } from "./DeletePopoverForm";
 import { jobButtonColor } from "../utils/jobButtonColor";
-import { useColors } from "../hooks/useColors";
 
 interface SimpleCardProps {
   page: string 
   jobs: any[]
   jobNames: any[]
   index: number
+  colors: Record<string, string>
 }
 
-export const SimpleCard: React.FC<SimpleCardProps> = ({ page, jobs, jobNames, index }) => {
+export const SimpleCard: React.FC<SimpleCardProps> = ({ page, jobs, jobNames, index, colors }) => {
   const navigate = useNavigate();
-  const [colors] = useColors();
 
   let j = jobs[index];
   let jsonText = JSON.stringify(j, undefined, 4);
