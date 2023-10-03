@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Flex, Heading, Link as ChakraLink } from "@chakra-ui/react";
+import { Button, Flex, Heading, Image, Link as ChakraLink } from "@chakra-ui/react";
 import { useNavigate, Link } from "react-router-dom";
 import { Outlet, useLocation } from "react-router-dom";
+import logo from "../assets/aerotract_logo.png";
 
 interface NavBarProps {
 
@@ -31,6 +32,13 @@ export const NavBar: React.FC<NavBarProps> = () => {
         m="auto"
         flex={1}
       >
+        <Image
+          src={logo}
+          boxSize='40px'
+          mr={2}
+          alt='logo'
+          borderRadius='full'
+        />
         <Heading color="white" marginRight={10}>
           <ChakraLink as={Link} to="/">
             Ziggy
